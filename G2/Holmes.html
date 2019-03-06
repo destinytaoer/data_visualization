@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>福尔摩斯案例：人物登场次数</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <style>
+    *, *:before, *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+      /* hidden scrollbar */
+    body { overflow: hidden; }
+  </style>
+  <style>
+    body {
+      background-color: #fce9d3;
+    }
+
+    .label {
+      height: 40px;
+      width: 240px;
+      margin-left: -240px;
+    }
+
+    .label p {
+      float: right;
+      font-size: 12px;
+      margin-top: 15px;
+      color: #545454;
+    }
+
+    .label img {
+      float: right;
+      height: 36px;
+      width: 36px;
+      margin: 8px 8px 0 8px;
+    }
+
+    .label .line {
+      float: right;
+      width: 48px;
+      height: 1px;
+      margin-top: 22px;
+      margin-right: 8px;
+      background-color: #545454;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+  <div id="holmes"></div>
+  <script src="./g2.min.js"></script>
+  <script>
+    const data = [
+      {
+        name: 'Sherlock Holmes',
+        count: 60
+      },
+      {
+        name: 'DR.Watson',
+        count: 58
+      },
+      {
+        name: 'MRS Hudson',
+        count: 14
+      },
+      {
+        name: 'Inspector Lestrade',
+        count: 13
+      },
+      {
+        name: 'Tobias Gregson',
+        count: 4
+      },
+      {
+        name: 'Stanley Hopkins',
+        count: 4
+      },
+      {
+        name: 'Mycroft Holmes',
+        count: 4
+      },
+      {
+        name: 'Moriarty',
+        count: 3
+      },
+      {
+        name: 'Baker Street Irregulars',
+        count: 3
+      }
+    ]
+
+    const figures = {
+      'Baker Street Irregulars': 'https://gw.alipayobjects.com/zos/rmsportal/uSfZVNPGtZPLwylHPiXP.png',
+      'Moriarty': 'https://gw.alipayobjects.com/zos/rmsportal/pXsDydKklxzFfiHPreQT.png',
+      'Mycroft Holmes': 'https://gw.alipayobjects.com/zos/rmsportal/InkWSynQklObcfCJptKR.png',
+      'Stanley Hopkins': 'https://gw.alipayobjects.com/zos/rmsportal/onLfNdrZZYtwActucrUe.png',
+      'Tobias Gregson': 'https://gw.alipayobjects.com/zos/rmsportal/FiCUKnNFqFXVsUtDqhbN.png',
+      'Inspector Lestrade': 'https://gw.alipayobjects.com/zos/rmsportal/vrkqCEvwFNkZLHxNHGSh.png',
+      'MRS Hudson': 'https://gw.alipayobjects.com/zos/rmsportal/ZMwPMclDjulLUhmTxuiz.png',
+      'DR.Watson': 'https://gw.alipayobjects.com/zos/rmsportal/RYnWSAHIyKGplUNeFRJv.png',
+      'Sherlock Holmes': 'https://gw.alipayobjects.com/zos/rmsportal/cNJqDxQxgDvbzvQdfavX.png'
+    };
+
+    // 建立绘图容器
+    const chart = new G2.Chart({
+      container: 'holmes', // 容器 id，容器不能是 canvas
+      forceFit: true,
+      height: window.innerHeight,
+      padding: [16, 48, 16, 260]
+    })
+
+    // 注册柱形的自定义图形
+    const Shape = G2.Shape;
+    Shape.registerShape('interval', 'stackImage', {
+      // 获取柱形的四个顶点
+      getPoints(cfg) {
+        const x = cfg.x;
+        const y = cfg.y;
+        const y0 = cfg.y0;
+        const size = cfg.size;
+        return [{
+            x,
+            y
+          },
+          {
+            x: x + size,
+            y
+          },
+          {
+            x: x + size,
+            y: y0
+          },
+          {
+            x,
+            y: y0
+          }
+        ];
+      },
+
+      // 绘制柱状图形
+      drawShape(cfg, container) {
+        cfg.points = this.parsePoints(cfg.points); // 上一步getPoints()方法中获取的柱形四角数据
+        const pointLength = cfg.points.length;
+        const width = cfg.points[0].x - cfg.points[pointLength - 1].x; //通过四角数据获取柱形宽度
+        const height = cfg.points[0].y - cfg.points[1].y; //通过四角数据获取柱形高度
+        const count = cfg.origin._origin.count; //获取柱形所关联的数据，找到count字段
+        const img_width = width / count; //计算得出书本icon宽度（高度为柱形高度）
+
+
+        const images = [];
+        for (let i = 0; i < count; i++) {
+          const x = cfg.points[pointLength - 1].x + i * img_width;
+          const y = cfg.points[0].y - height / 2;
+          const offset = (i % 2) ? -2 : 2; //让书本高低错落排列
+          container.addShape('image', {
+            attrs: {
+              x,
+              y: y + offset,
+              width: img_width,
+              height,
+              img: 'https://gw.alipayobjects.com/zos/rmsportal/KFzZmWhVdFgJMJHcVedn.png'
+            }
+          });
+        }
+        return images[0]
+      }
+    });
+
+    // 数据绑定
+    chart.source(data.sort((a, b) => a.count - b.count))
+
+    // 定义图表信息
+    chart.interval()
+      .position('name*count')
+      .color('#aaa')
+      .shape('stackImage')
+      .label('count', {
+        offset: 10,
+        textStyle: {
+          fontFamily: 'monotype Corsiva',
+          fontSize: 20,
+          fill: '#5D5A5E'
+        }
+      })
+
+    // 坐标转置，不能与下面的进行链式操作
+    chart.coord().transpose()
+
+    // 坐标轴自定义
+    chart.axis('count', false); // false 为去掉此坐标轴
+    chart.axis('name', {
+      label: {
+        htmlTemplate(text, item, index) {
+          const name = '<p>' + text + '</p>';
+          const line = '<div class="line"></div>';
+          const img = '<img src="' + figures[text] + '">';
+          return '<div class="label">' + name + line + img + '</div>';
+        }
+      }
+    });
+
+    // 绘制
+    chart.render()
+  </script>
+</body>
+
+</html>

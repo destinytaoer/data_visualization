@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>世界杯胜负分析</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <style>
+  *, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  /* hidden scrollbar */
+  body { overflow: hidden; }
+  </style>
+
+  <script src="https://gw.alipayobjects.com/os/lib/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    #worldcup {
+      width: 760px; 
+      height: 744px;
+      background: url(https://gw.alipayobjects.com/zos/rmsportal/OSujrQtOvnOJVzRLmfIP.png);
+    }
+  </style>
+</head>
+<body>
+<div id="worldcup"></div>
+<script src="./g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-2.1.1/build/plugins.js"></script>
+<script>
+const data = {
+	  "roots": [{
+		"teamA": "法国",
+		"flagA": "https://gw.alipayobjects.com/zos/rmsportal/yHYaCVIPRwEmmjbNqJjW.jpg",
+		"teamB": "克罗地亚",
+		"flagB": "https://gw.alipayobjects.com/zos/rmsportal/LJoAlBjTxagRLoNgSVmU.jpg",
+		"scoreA": 4,
+		"scoreB": 2,
+		"children": [{
+		  "teamA": "法国",
+		  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/yHYaCVIPRwEmmjbNqJjW.jpg",
+		  "teamB": "比利时",
+		  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/tUwmQwmljZAvTXtljXcV.jpg",
+		  "scoreA": 1,
+		  "scoreB": 0,
+		  "children": [
+			{
+			  "teamA": "法国",
+			  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/yHYaCVIPRwEmmjbNqJjW.jpg",
+			  "teamB": "乌拉圭",
+			  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/uSxNUKLbgrtfTteNiqZG.jpg",
+			  "scoreA": 2,
+			  "scoreB": 0,
+			  "children": [{
+				"teamA": "乌拉圭",
+				"flagA": "https://gw.alipayobjects.com/zos/rmsportal/uSxNUKLbgrtfTteNiqZG.jpg",
+				"teamB": "葡萄牙",
+				"flagB": "https://gw.alipayobjects.com/zos/rmsportal/XrvetbWkjkODIUeQrYtu.jpg",
+				"scoreA": 2,
+				"scoreB": 1
+			  }, {
+				"teamA": "法国",
+				"flagA": "https://gw.alipayobjects.com/zos/rmsportal/yHYaCVIPRwEmmjbNqJjW.jpg",
+				"teamB": "阿根廷",
+				"flagB": "https://gw.alipayobjects.com/zos/rmsportal/IpMPXjjaNVXeORHlkDRa.jpg",
+				"scoreA": 4,
+				"scoreB": 3
+			  }]
+			},
+			{
+			  "teamA": "比利时",
+			  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/tUwmQwmljZAvTXtljXcV.jpg",
+			  "teamB": "巴西",
+			  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/kPbSJtcjvzRsIKkfRUlf.jpg",
+			  "scoreA": 2,
+			  "scoreB": 1,
+			  "children": [{
+				"teamA": "巴西",
+				"flagA": "https://gw.alipayobjects.com/zos/rmsportal/kPbSJtcjvzRsIKkfRUlf.jpg",
+				"teamB": "墨西哥",
+				"flagB": "https://gw.alipayobjects.com/zos/rmsportal/ydzEtrSCJcNopBithjxQ.jpg",
+				"scoreA": 2,
+				"scoreB": 0
+			  }, {
+				"teamA": "比利时",
+				"flagA": "https://gw.alipayobjects.com/zos/rmsportal/tUwmQwmljZAvTXtljXcV.jpg",
+				"teamB": "日本",
+				"flagB": "https://gw.alipayobjects.com/zos/rmsportal/pbaukmqzXXDkIKohbYdc.jpg",
+				"scoreA": 3,
+				"scoreB": 2
+			  }]
+			}
+		  ]
+		}, {
+		  "teamA": "克罗地亚",
+		  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/LJoAlBjTxagRLoNgSVmU.jpg",
+		  "teamB": "英格兰",
+		  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/JCNbCBCVPOsRkJtEfYXV.jpg",
+		  "scoreA": 2,
+		  "scoreB": 1,
+		  "children": [
+			{
+			  "teamA": "克罗地亚",
+			  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/LJoAlBjTxagRLoNgSVmU.jpg",
+			  "teamB": "俄罗斯",
+			  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/sBdizLiYPYNwlpCYPIFE.jpg",
+			  "scoreA": 6,
+			  "scoreB": 5,
+			  "children": [
+				{
+				  "teamA": "克罗地亚",
+				  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/LJoAlBjTxagRLoNgSVmU.jpg",
+				  "teamB": "丹麦",
+				  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/EkBBCGWmUTBdzCjjeXak.jpg",
+				  "scoreA": 4,
+				  "scoreB": 3
+				},
+				{
+				  "teamA": "俄罗斯",
+				  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/sBdizLiYPYNwlpCYPIFE.jpg",
+				  "teamB": "西班牙",
+				  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/gTlBQOQMUZYJjRUdrKtu.jpg",
+				  "scoreA": 5,
+				  "scoreB": 4
+				}
+			  ]
+			},
+			{
+			  "teamA": "英格兰",
+			  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/JCNbCBCVPOsRkJtEfYXV.jpg",
+			  "teamB": "瑞典",
+			  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/hqSMLtdmjIBHjxcCyLdw.jpg",
+			  "scoreA": 2,
+			  "scoreB": 0,
+			  "children": [
+				{
+				  "teamA": "瑞典",
+				  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/hqSMLtdmjIBHjxcCyLdw.jpg",
+				  "teamB": "瑞士",
+				  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/eYZkxeUScNXwOHgcybbw.jpg",
+				  "scoreA": 1,
+				  "scoreB": 0
+				},
+				{
+				  "teamA": "英格兰",
+				  "flagA": "https://gw.alipayobjects.com/zos/rmsportal/JCNbCBCVPOsRkJtEfYXV.jpg",
+				  "teamB": "哥伦比亚",
+				  "flagB": "https://gw.alipayobjects.com/zos/rmsportal/KbtaPGKCnDYohqKyTBRV.jpg",
+				  "scoreA": 5,
+				  "scoreB": 4
+				}
+			  ]
+			}
+		  ]
+		}]
+	  }]
+	};
+// 自定义节点
+G6.registerNode('card', {
+  draw(item) {
+    const group = item.getGraphicGroup();
+    const model = item.getModel();
+    const scoreTextStyle = {
+      textAlign: 'center',
+      fontWeight: 900,
+      fontSize: 14,
+      fill: '#000'
+    };
+    const teamNameTextStyle = {
+      textAlign: 'center',
+      fontSize: 12,
+      fill: 'rgba(0, 0, 0, 0.45)'
+    };
+    const width = 134;
+    const height = 60;
+    const keyShape = group.addShape('rect', {
+      attrs: {
+        x: 0,
+        y: 0,
+        width,
+        height,
+        fill: '#fff',
+        radius: 4,
+      }
+    });
+    group.addShape('image', {
+      attrs: {
+        x: 8,
+        y: 8,
+        width: 40,
+        height: 24,
+        img: model.flagA
+      }
+    });
+    group.addShape('image', {
+      attrs: {
+        x: 86,
+        y: 8,
+        width: 40,
+        height: 24,
+        img: model.flagB
+      }
+    });
+    group.addShape('text', {
+      attrs: {
+        ...teamNameTextStyle,
+        x: 28,
+        y: 52,
+        text: model.teamA,
+      }
+    });
+    group.addShape('text', {
+      attrs: {
+        ...teamNameTextStyle,
+        x: 106,
+        y: 52,
+        text: model.teamB,
+      }
+    });
+    group.addShape('text', {
+      attrs: {
+        ...scoreTextStyle,
+        x: 67,
+        y: 52,
+        text: model.scoreA + ' : '+ model.scoreB,
+      }
+    });
+    return keyShape;
+  },
+  // 锚点，即连线的位置
+  anchor(node) {
+	  const hierarchy = node.getHierarchy();
+	  const parent = node.getParent();
+	  if(parent && hierarchy > 2) {
+      const bbox = node.getBBox();
+      const parentBBox = parent.getBBox();
+      if(parentBBox.centerY > bbox.centerY) {
+        // 父节点在下边
+        return [
+          [0, 0.5], // 左中
+          [1, 0.5], // 右中
+          [0.5, 1] // 下中
+        ]
+      } else {
+        // 父节点在上边
+        return [
+          [0, 0.5], // 左中
+          [1, 0.5], // 右中
+          [0.5, 0], // 上中
+        ]
+      }
+	  }
+	  return [
+      [0, 0.5],
+      [1, 0.5],
+      [0.5, 0],
+      [0.5, 1]
+	  ]
+	}
+});
+
+// 树形布局
+const layout = new G6.Layouts.CompactBoxTree({
+  direction: 'V',
+  getHGap() {
+	  return 12; // 水平的间距
+	},
+	getVGap() {
+	  return 16; // 垂直的间距
+	}
+});
+
+const tree = new G6.Tree({
+  id: 'worldcup',  // DOM中的容器节点
+  fitView: 'cc',
+  layout,
+  width: 760,  // 设置画布大小
+  height: 744  // 设置画布大小
+});
+
+tree.node({
+  shape: 'card'
+})
+
+tree.edge({
+  shape: 'polyline-round', // 需要引入插件，树形结构的边有两种展示形式：直角折线、圆角折线
+  style: {
+    stroke: 'white',
+    lineWidth: 1,
+    strokeOpacity: 1
+  }
+});
+
+tree.read(data);  // 将数据读入图
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>福尔摩斯案例：罪犯从哪里来</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <style>
+    *,
+    *:before,
+    *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    /* hidden scrollbar */
+    body {
+      overflow: hidden;
+    }
+  </style>
+
+  <style>
+    body {
+      background-color: #fce9d3;
+    }
+  </style>
+  <script src="https://gw.alipayobjects.com/os/lib/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="holmes"></div>
+  <!-- <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.2.8/dist/g2.min.js"></script> -->
+  <script src="./g2.min.js"></script>
+  <script>
+    const data = [
+      { type: 'British', value: 60, book:'holmes' },
+      { type: 'European', value: 19, book:'holmes' },
+      { type: 'North American', value: 9, book:'holmes'},
+      { type: 'South American', value: 5, book:'holmes' },
+      { type: 'Austrialian', value: 3.5, book:'holmes' },
+      { type: 'African or Asian', value: 3.5, book:'holmes' }, 
+    ]
+    const colors = [ '#211a1a', '#decfc0', '#7f766e', '#423a32', '#a09289', '#423a34' ]
+
+    const chart = new G2.Chart({
+      container: 'holmes',
+      forceFit: true,
+      height: window.innerHeight,
+      padding: 'auto'
+    })
+
+    chart.source(data)
+
+    chart.coord('theta', {
+      radius: .55, // 整个容器的最短边的一半的 radius 倍为饼图的半径
+      innerRadius: 0.49  // 饼图半径的 innerRadius 倍
+    }).rotate(15)
+    
+    // 标签的位置
+    chart.legend({
+      position: 'right-center',
+      offsetX: - window.innerWidth * 0.2
+    })
+
+    chart.intervalStack()
+      .position('bb*value') // bb 为随便起的名称
+      .color('type', colors)
+      // .size(100) // 设置了 radius 不需要 size
+      .label('value',{
+        offset: 50,
+        textStyle: {
+          fontSize: 20,
+          textBaseline: 'center',
+          fontFamily: 'monotype Corsiva'
+        },
+        formatter: text => {
+          return text + '%'
+        }
+      })
+      .tooltip(false) // 关闭浮窗提示
+    
+    // 图像 guide HTML
+    chart.guide().html({
+      position: ['50%', '50%'],
+      alignX: 'middle',
+      alignY: 'middle',
+      html: '<img id="pie-figure" style="width:210px; height:210px;" src="https://gw.alipayobjects.com/zos/rmsportal/IMbtJLdkRHNqcBvMtVHt.png">'
+    });
+
+    // 文本 guide HTML 
+    chart.guide().html({
+      position: ['50%', '50%'],
+      alignX: 'middle',
+      alignY: 'middle',
+      html: '<div style="text-align: center;width: 100px;height: 72px;vertical-align: middle;">' + '<p id="region" style="font-size: 24px;margin: 0;"></p>' + '<p id="value" style="font-size: 20px;margin: 10px 10px 5px;font-weight: bold;"></p>' + '</div>'
+    });
+
+    // 绑定鼠标移动事件
+    chart.on('interval:mouseenter', function(ev) {
+      const data = ev.data._origin
+      $("#pie-figure").css('opacity', 0)
+      $("#region").text(data.type)
+      $('#value').text(data.value + '%')
+    })
+
+    chart.on('interval:mouseleave', function(ev) {
+      $("#pie-figure").css('opacity',1)
+      $("#region").text('')
+      $("#value").text('')
+    });
+
+    chart.render()
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>世界杯胜负分析</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <style>
+  *, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  /* hidden scrollbar */
+  body { overflow: hidden; }
+  </style>
+
+  <script src="https://gw.alipayobjects.com/os/lib/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="worldcup" style="background-color:rgb(57,64,77);position:absolute; width:720px; height:720px">
+  <h3 style="color:white; margin: 20pt 20pt 0pt; position: relative;">2018 世界杯关注度、胜负分析</h3>
+  <p style="color:rgb(126,131,139); margin:20px 100px 0px 22px">该图为 2018 年世界杯期间的相关数据。图上点越大代表该国球队关注的人数越多，连线代表双方有对战，箭头代表胜方，双箭头代表双方均有赢。</p>
+</div>
+<script src="./g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-2.1.1/build/plugins.js"></script>
+<script>
+const data = {
+  "nodes": [{
+    "id": "Argentina",
+    "name": "Argentina"
+  }, {
+    "id": "Australia",
+    "name": "Australia"
+  }, {
+    "id": "Belgium",
+    "name": "Belgium"
+  }, {
+    "id": "Brazil",
+    "name": "Brazil"
+  }, {
+    "id": "Colombia",
+    "name": "Colombia"
+  }, {
+    "id": "Costa Rica",
+    "name": "Costa Rica"
+  }, {
+    "id": "Croatia",
+    "name": "Croatia"
+  }, {
+    "id": "Denmark",
+    "name": "Denmark"
+  }, {
+    "id": "Egypt",
+    "name": "Egypt"
+  }, {
+    "id": "England",
+    "name": "England"
+  }, {
+    "id": "France",
+    "name": "France"
+  }, {
+    "id": "Germany",
+    "name": "Germany"
+  }, {
+    "id": "Iceland",
+    "name": "Iceland"
+  }, {
+    "id": "IR Iran",
+    "name": "IR Iran"
+  }, {
+    "id": "Japan",
+    "name": "Japan"
+  }, {
+    "id": "Korea Republic",
+    "name": "Korea Republic"
+  }, {
+    "id": "Mexico",
+    "name": "Mexico"
+  }, {
+    "id": "Morocco",
+    "name": "Morocco"
+  }, {
+    "id": "Nigeria",
+    "name": "Nigeria"
+  }, {
+    "id": "Panama",
+    "name": "Panama"
+  }, {
+    "id": "Peru",
+    "name": "Peru"
+  }, {
+    "id": "Poland",
+    "name": "Poland"
+  }, {
+    "id": "Portugal",
+    "name": "Portugal"
+  }, {
+    "id": "Russia",
+    "name": "Russia"
+  }, {
+    "id": "Saudi Arabia",
+    "name": "Saudi Arabia"
+  }, {
+    "id": "Senegal",
+    "name": "Senegal"
+  }, {
+    "id": "Serbia",
+    "name": "Serbia"
+  }, {
+    "id": "Spain",
+    "name": "Spain"
+  }, {
+    "id": "Sweden",
+    "name": "Sweden"
+  }, {
+    "id": "Switzerland",
+    "name": "Switzerland"
+  }, {
+    "id": "Tunisia",
+    "name": "Tunisia"
+  }, {
+    "id": "Uruguay",
+    "name": "Uruguay"
+  }],
+  "edges": [{
+    "id": "0",
+    "target": "Russia",
+    "source": "Saudi Arabia",
+    "target_score": 5,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "1",
+    "target": "Uruguay",
+    "source": "Egypt",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "2",
+    "target": "Russia",
+    "source": "Egypt",
+    "target_score": 3,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "3",
+    "target": "Uruguay",
+    "source": "Saudi Arabia",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "4",
+    "target": "Uruguay",
+    "source": "Russia",
+    "target_score": 3,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "5",
+    "target": "Saudi Arabia",
+    "source": "Egypt",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "6",
+    "target": "IR Iran",
+    "source": "Morocco",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "7",
+    "target": "Portugal",
+    "source": "Spain",
+    "target_score": 3,
+    "source_score": 3,
+    "directed": false
+  }, {
+    "id": "8",
+    "target": "Portugal",
+    "source": "Morocco",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "9",
+    "target": "Spain",
+    "source": "IR Iran",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "10",
+    "target": "IR Iran",
+    "source": "Portugal",
+    "target_score": 1,
+    "source_score": 1,
+    "directed": false
+  }, {
+    "id": "11",
+    "target": "Spain",
+    "source": "Morocco",
+    "target_score": 2,
+    "source_score": 2,
+    "directed": false
+  }, {
+    "id": "12",
+    "target": "France",
+    "source": "Australia",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "13",
+    "target": "Denmark",
+    "source": "Peru",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "14",
+    "target": "Denmark",
+    "source": "Australia",
+    "target_score": 1,
+    "source_score": 1,
+    "directed": false
+  }, {
+    "id": "15",
+    "target": "France",
+    "source": "Peru",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "16",
+    "target": "Denmark",
+    "source": "France",
+    "target_score": 0,
+    "source_score": 0,
+    "directed": false
+  }, {
+    "id": "17",
+    "target": "Peru",
+    "source": "Australia",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "18",
+    "target": "Argentina",
+    "source": "Iceland",
+    "target_score": 1,
+    "source_score": 1
+  }, {
+    "id": "19",
+    "target": "Croatia",
+    "source": "Nigeria",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "20",
+    "target": "Croatia",
+    "source": "Argentina",
+    "target_score": 3,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "21",
+    "target": "Nigeria",
+    "source": "Iceland",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "22",
+    "target": "Argentina",
+    "source": "Nigeria",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "23",
+    "target": "Croatia",
+    "source": "Iceland",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "24",
+    "target": "Serbia",
+    "source": "Costa Rica",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "25",
+    "target": "Brazil",
+    "source": "Switzerland",
+    "target_score": 1,
+    "source_score": 1,
+    "directed": false
+  }, {
+    "id": "26",
+    "target": "Brazil",
+    "source": "Costa Rica",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "27",
+    "target": "Switzerland",
+    "source": "Serbia",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "28",
+    "target": "Brazil",
+    "source": "Serbia",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "29",
+    "target": "Switzerland",
+    "source": "Costa Rica",
+    "target_score": 2,
+    "source_score": 2,
+    "directed": false
+  }, {
+    "id": "30",
+    "target": "Mexico",
+    "source": "Germany",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "31",
+    "target": "Sweden",
+    "source": "Korea Republic",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "32",
+    "target": "Mexico",
+    "source": "Korea Republic",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "33",
+    "target": "Germany",
+    "source": "Sweden",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "34",
+    "target": "Korea Republic",
+    "source": "Germany",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "35",
+    "target": "Sweden",
+    "source": "Mexico",
+    "target_score": 3,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "36",
+    "target": "Belgium",
+    "source": "Panama",
+    "target_score": 3,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "37",
+    "target": "England",
+    "source": "Tunisia",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "38",
+    "target": "Belgium",
+    "source": "Tunisia",
+    "target_score": 5,
+    "source_score": 2,
+    "directed": true
+  }, {
+    "id": "39",
+    "target": "England",
+    "source": "Panama",
+    "target_score": 6,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "40",
+    "target": "Belgium",
+    "source": "England",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "41",
+    "target": "Tunisia",
+    "source": "Panama",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "42",
+    "target": "Japan",
+    "source": "Colombia",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "43",
+    "target": "Senegal",
+    "source": "Poland",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "44",
+    "target": "Japan",
+    "source": "Senegal",
+    "target_score": 2,
+    "source_score": 2,
+    "directed": false
+  }, {
+    "id": "45",
+    "target": "Colombia",
+    "source": "Poland",
+    "target_score": 3,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "46",
+    "target": "Poland",
+    "source": "Japan",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "47",
+    "target": "Colombia",
+    "source": "Senegal",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "48",
+    "target": "Uruguay",
+    "source": "Portugal",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "49",
+    "target": "France",
+    "source": "Argentina",
+    "target_score": 4,
+    "source_score": 3,
+    "directed": true
+  }, {
+    "id": "50",
+    "target": "Russia",
+    "source": "Spain",
+    "target_score": 5,
+    "source_score": 4,
+    "directed": true
+  }, {
+    "id": "51",
+    "target": "Croatia",
+    "source": "Denmark",
+    "target_score": 4,
+    "source_score": 3,
+    "directed": true
+  }, {
+    "id": "52",
+    "target": "Brazil",
+    "source": "Mexico",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "53",
+    "target": "Belgium",
+    "source": "Japan",
+    "target_score": 3,
+    "source_score": 2,
+    "directed": true
+  }, {
+    "id": "54",
+    "target": "Sweden",
+    "source": "Switzerland",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "55",
+    "target": "England",
+    "source": "Colombia",
+    "target_score": 4,
+    "source_score": 3,
+    "directed": true
+  }, {
+    "id": "56",
+    "target": "France",
+    "source": "Uruguay",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "57",
+    "target": "Belgium",
+    "source": "Brazil",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "58",
+    "target": "Croatia",
+    "source": "Russia",
+    "target_score": 6,
+    "source_score": 5,
+    "directed": true
+  }, {
+    "id": "59",
+    "target": "England",
+    "source": "Sweden",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "60",
+    "target": "France",
+    "source": "Belgium",
+    "target_score": 1,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "61",
+    "target": "Croatia",
+    "source": "England",
+    "target_score": 2,
+    "source_score": 1,
+    "directed": true
+  }, {
+    "id": "62",
+    "target": "Belgium",
+    "source": "England",
+    "target_score": 2,
+    "source_score": 0,
+    "directed": true
+  }, {
+    "id": "63",
+    "target": "France",
+    "source": "Croatia",
+    "target_score": 4,
+    "source_score": 2,
+    "directed": true
+  }]
+};
+
+const layout = new G6.Plugins['layout.forceAtlas2'] // 力导向图布局
+const fisheyePlugin = new G6.Plugins['tool.fisheye'] // 鱼眼放大镜插件
+
+// 节点出度入度计算
+const nodes = data.nodes;
+const edges = data.edges;
+for (let i = 0; i < nodes.length; i += 1) {
+  nodes[i].degree = 0;
+  nodes[i].indegree = 0;
+  nodes[i].outdegree = 0;
+}
+for (let i = 0; i < edges.length; i += 1) {
+  for (let j = 0; j < nodes.length; j += 1) {
+    if (nodes[j].id == edges[i].source) {
+      nodes[j].degree +=1 ;
+      if (edges[i].directed)
+        nodes[j].outdegree += 1;
+    } else if (nodes[j].id == edges[i].target) {
+      nodes[j].degree += 1;
+      if (edges[i].directed)
+        nodes[j].indegree += 1;
+    }
+  }
+}
+
+// 通过插件，建立节点的入度和节点大小、颜色的映射关系
+const Mapper = G6.Plugins['tool.mapper'];
+const nodeSizeMapper = new Mapper('node', 'indegree', 'size', [30, 50], {legendCfg: null});
+const nodeColorMapper = new Mapper('node', 'indegree', 'color', ['#166dac', '#008cec'], {legendCfg: null}); 
+
+const graph = new G6.Graph({
+  id: 'worldcup',  // DOM中的容器节点
+  fitView: 'autoZoom',
+  plugins: [layout, nodeSizeMapper, nodeColorMapper, fisheyePlugin], // 配置插件
+  width: 720,  // 设置画布大小
+  height: 600,  // 设置画布大小
+  minZoom: 0,
+  modes: {
+    default: ['panCanvas']
+  }
+});
+
+graph.node({
+  // 节点的样式
+  style(model) {
+    return {
+      stroke: '#2f4c66',  // 点边缘颜色
+      lineWidth: 5,  // 点边缘粗细
+      fillOpacity: 1,  // 点填充透明度
+      strokeOpacity: 1  // 点边缘透明度
+    }
+  },
+  // 节点文字
+  label(model) {
+    return {
+      fontFamily: 'PingFang SC',  // 字体
+      text: model.name,  // 选择数据中的name属性作为文字内容
+      fill: '#fff',  // 文字颜色
+      stroke: '#777',  // 文字背景颜色
+      lineWidth: 2.5,  // 文字背景宽度
+      fontSize: 12  // 字体大小
+    }
+  }
+});
+
+graph.edge({
+  style(model) {
+    return{
+      stroke: '#A3B1BF',
+      lineWidth: 2,
+      endArrow: model.directed // 箭头方向
+    };
+  }
+});
+
+graph.read(data);  // 将数据读入图
+</script>
+</body>
+</html>

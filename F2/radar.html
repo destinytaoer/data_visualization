@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>基金诊断雷达图</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <script src="https://gw.alipayobjects.com/os/lib/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    .chart-tooltip {
+      position: absolute;
+      z-index: 99;
+      background-color: rgb(233, 241, 255);
+      border: 1px solid #597EF7;
+      padding: 1.3333333333333333vw 2.4vw;
+      border-radius: 0.5333333333333333vw;
+      text-align: center;
+      font-size: 3.2vw;
+      color: #2e2e2e;
+      text-align: left;
+      top: 0;
+      left: 0;
+      visibility: hidden;
+      max-width: 53.333333333333336vw;
+    }
+
+    .chart-tooltip:after,
+    .chart-tooltip:before {
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      position: absolute;
+      width: 0;
+      top: 100%;
+    }
+
+    .chart-tooltip:before {
+      border-width: 7px;
+      border-top-color: #597EF7;
+      left: 50%;
+      margin-left: -7px;
+      margin-top: 1px;
+    }
+
+    .chart-tooltip:after {
+      border-width: 7px;
+      border-top-color: rgb(233, 241, 255);
+      left: 50%;
+      margin-left: -7px;
+    }
+
+    .chart-tooltip span {
+      display: block;
+    }
+
+    .chart-tooltip span:nth-child(1) {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="chart-container">
+  <div class="chart-header"></div>
+  <canvas id="radar"></canvas>
+  <div class="chart-tooltip">
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<script src="./f2@3.3.5.min.js"></script>
+<script>
+  const data = [
+	  { name: '超大盘能力', value: 6.5, illustrate: '超大盘能力值越高表示相对于参考指数表现越好' },
+	  { name: '抗跌能力', value: 9.5, illustrate: '股市下跌，净值下跌幅度越小，分值越高' },
+	  { name: '稳定能力', value: 9, illustrate: '分支越高稳定性越强' },
+	  { name: '绝对收益能力', value: 6, illustrate: '分值越高绝对收益能力越强' },
+	  { name: '选证择时能力', value: 6, illustrate: '分值越高选证择时能力越强' },
+	  { name: '风险回报能力', value: 8, illustrate: '分值越高风险回报能力越强' }
+  ];
+  
+  const chart = new F2.Chart({
+    id: 'radar',
+    width: 375,
+    height: 260,
+    pixelRatio: window.devicePixelRatio
+  })
+
+  chart.coord('polar') // 转换为极坐标
+
+  chart.source(data, {
+    value: {
+      min: 0,
+      max: 10,
+      tickCount: 4
+    } // 设置了 y 轴的最大最小值，以及刻度个数
+  })
+
+  chart.axis('value', {
+    label: null, // 不展示文本
+    grid(text, index) {
+      if (index === 3) {
+        return {
+          lineDash: null
+        };
+      }
+      return {
+        // lineDash: 'dash'
+      };
+    }
+  });
+
+  chart.line().position('name*value').style({
+    stroke: '#597EF7'
+  }).animate({
+    appear: {
+      animation: 'groupWaveIn'
+    }
+  });
+  chart.area().position('name*value').style({
+    fillOpacity: 1,
+    fill: '#ADC6FF'
+  }).animate({
+    appear: {
+      animation: 'groupWaveIn'
+    }
+  });
+  chart.point().position('name*value').style({
+    lineWidth: 1,
+    fill: '#597EF7',
+    stroke: '#fff'
+  }).animate({
+    appear: {
+      animation: 'groupWaveIn'
+    }
+  });
+
+  chart.guide().html({
+    position: ['50%', '50%'],
+    html: '<div style="color: #fff;white-space: nowrap;text-align:center;">'
+      + '<p style="font-size: 4.266666666666667vw;margin:0;font-weight: 300;text-shadow: 0 0 2px rgba(0, 0, 0, 0.09);">综合评分</p>'
+      + '<p style="font-size: 9vw;margin:0;text-shadow: 0 0 2px rgba(0, 0, 0, 0.09);">78</p>'
+      + '</div>'
+  });
+
+  // 自定义提示
+  chart.tooltip({
+    tooltipMarkerStyle: {
+      stroke: "#597EF7"
+    },
+    custom: true,
+    onChange(e) {
+      const item = e.items[0];
+      const origin = item.origin;
+      const tooltipEl = $(".chart-tooltip");
+      tooltipEl.html(
+        "<span>" +
+          origin.name +
+          ": " +
+          origin.value +
+          "</span>" +
+          "<span>" +
+          origin.illustrate +
+          "</span>"
+      );
+
+      // 设置 tooltip 位置
+      const canvasOffsetTop = $("#radar").position().top;
+      const canvasOffsetLeft = $("#radar").position().left;
+      const tooltipWidth = tooltipEl.outerWidth();
+      const tooltipHeight = tooltipEl.outerHeight();
+
+      tooltipEl.css({
+        visibility: "visible",
+        left: canvasOffsetLeft + item.x - tooltipWidth / 2,
+        top: canvasOffsetTop + item.y - tooltipHeight - 15
+      });
+    },
+    onHide() {
+      const tooltipEl = $(".chart-tooltip");
+      tooltipEl.css({
+        visibility: "hidden"
+      });
+    }
+  });
+
+  chart.render()
+</script>
+</body>
+</html>

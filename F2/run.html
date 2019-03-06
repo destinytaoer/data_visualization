@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>健康步数案例</title>
+  <link rel="stylesheet" href="https://gw.alipayobjects.com/os/lib/normalize/8.0.0/normalize.min.css">
+  <script src="https://gw.alipayobjects.com/os/lib/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    .chart-container {
+      position: relative;
+      margin: 12.8vw auto 0;
+      width: 100%;
+      background-image: linear-gradient(
+        -135deg,
+        #874bff 0%,
+        #6854ee 43%,
+        #6052f2 63%,
+        #534ffa 100%
+      );
+      border-radius: 1.0666666666666667vw;
+      overflow: hidden;
+    }
+    .chart-header {
+      height: 10.933333333333333vw;
+      margin: 0 3.466666666666667vw;
+      box-shadow: 0 1px 0 0 #85a5ff;
+      line-height: 10.933333333333333vw;
+      text-align: left;
+      color: #adc6ff;
+      font-size: 5.6vw;
+    }
+    .chart-tooltip {
+      position: absolute;
+      z-index: 99;
+      font-size: 3.2vw;
+      color: #ADC6FF;
+      text-align: center;
+      top: 38vw;
+      left: 0;
+      margin-top: 3px;
+      visibility: hidden;
+      transition: visibility 0.2s cubic-bezier(0.23, 1, 0.32, 1), top 0.4s cubic-bezier(0.23, 1, 0.32, 1)
+    }
+  </style>
+</head>
+<body>
+  <div class="chart-container">
+    <div class="chart-header"></div>
+    <canvas id="run"></canvas>
+    <div class="chart-tooltip" id="tooltip"></div>
+  </div>
+<script src="./f2@3.3.5.min.js"></script>
+<script>
+const data = [
+  { date: '2018-04-21', steps: 59 },
+  { date: '2018-04-22', steps: 2515 },
+  { date: '2018-04-23', steps: 6524 },
+  { date: '2018-04-24', steps: 26044 },
+  { date: '2018-04-25', steps: 29763 },
+  { date: '2018-04-26', steps: 10586 },
+  { date: '2018-04-27', steps: 14758 },
+  { date: '2018-04-29', steps: 549 },
+  { date: '2018-04-30', steps: 21 },
+  { date: '2018-05-01', steps: 1069 },
+  { date: '2018-05-02', steps: 7918 },
+  { date: '2018-05-03', steps: 5381 },
+  { date: '2018-05-04', steps: 11549 },
+  { date: '2018-05-06', steps: 19461 },
+  { date: '2018-05-07', steps: 22487 },
+  { date: '2018-05-08', steps: 11062 },
+  { date: '2018-05-09', steps: 7101 },
+  { date: '2018-05-10', steps: 12776 },
+  { date: '2018-05-11', steps: 12919 },
+  { date: '2018-05-12', steps: 7216 },
+  { date: '2018-05-13', steps: 4867 },
+  { date: '2018-05-14', steps: 8725 },
+  { date: '2018-05-15', steps: 8983 },
+  { date: '2018-05-16', steps: 22348 },
+  { date: '2018-05-17', steps: 17142 },
+  { date: '2018-05-18', steps: 8715 },
+  { date: '2018-05-19', steps: 3861 },
+  { date: '2018-05-20', steps: 8 },
+  { date: '2018-05-21', steps: 24365 },
+  { date: '2018-05-22', steps: 14271 }
+]
+
+// 创建区域图的渐变色
+const canvas = document.getElementById("run");
+const ctx = canvas.getContext("2d");
+const grd = ctx.createLinearGradient(0, canvas.offsetHeight, 0, 0);
+grd.addColorStop(0.03, "rgba(216,216,216,0.10)");
+grd.addColorStop(1, "#6E6CD8");
+
+$(".chart-header").text("步数：" + data[data.length - 1].steps);
+
+const chart = new F2.Chart({
+  id: 'run', // 对应 canvas 标签的 id
+  width: 375,
+  height: 260,
+  pixelRatio: window.devicePixelRatio // 设定对应的屏幕分辨率
+})
+
+const max = Math.max(...data.map((item) => item.steps))
+
+let num = Math.floor(max / 10000)
+let yAxisArr = []
+for (let i = 1; i <= num; i++) {
+  yAxisArr.push(i*10000)
+}
+
+chart.source(data, {
+  date: {
+    type: 'timeCat', // 声明 date 字段的数值类型
+    // range: [ 0, 1 ], // 设置坐标轴的显示范围，0 为坐标轴始端，1 为整个坐标轴末端
+    mask: 'MM-D' // 声明时间的格式化形式
+  },
+  steps: {
+    ticks: yAxisArr, // 直接声明 steps 字段对应坐标轴上的刻度
+    formatter(val) { 
+      return val > 0 ? val / 10000 + 'W' : 0;
+    } // 格式化坐标轴刻度文本
+  }
+})
+
+chart.axis('date', {
+  line: {
+    stroke: '#85A5FF'
+  }, // 配置坐标轴线的颜色
+  label(text, index, total) {
+    const cfg = {
+      textAlign: 'center',
+      fill: '#85A5FF',
+      fontSize: 12,
+      fontWeight: 300
+    };
+    if (index === 0) {
+      cfg.textAlign = 'start';
+      cfg.text = text.split('-').join('月');
+    } else {
+      cfg.text = text.split('-')[1];
+    }
+
+    if (index === total - 1) {
+      cfg.textAlign = 'end';
+      cfg.fill = '#ADC6FF';
+      cfg.fontWeight = 'normal';
+    }
+
+    return cfg;
+  } // label回调为不同位置坐标轴文本设定样式
+});
+
+chart.axis('steps', {
+  position: 'right', // 配置坐标轴的位置
+  label: {
+    fill: '#71CDCD',
+    fontSize: 9
+  }, // 坐标轴文本颜色配置
+  grid: {
+    stroke: '#77C0B3'
+  } // 坐标轴网格线配置
+})
+
+chart.area().position('date*steps').style({
+  fill: grd,
+  fillOpacity: 1
+}); // 绘制区域图
+chart.line().position('date*steps').color('#EFDBFF').size(1.5); // 绘制折线图
+chart.point().position('date*steps').color('#EFDBFF').size(2.5); // 绘制点图
+
+// 自定义提示框
+chart.tooltip({
+  custom: true,
+  showCrosshairs: true,
+  showTooltipMarker: false,
+  crosshairsStyle: {
+    lineDash: [2],
+    stroke: "#77C0B3"
+  },
+  onChange(e) {
+    const item = e.items[0];
+    const origin = item.origin;
+    const tooltipEl = $("#tooltip");
+    tooltipEl.text(origin.steps);
+    // 设置 tooltip 位置
+    const canvasOffsetTop = $("#run").position().top;
+    const canvasOffsetLeft = $("#run").position().left;
+    const tooltipWidth = tooltipEl.outerWidth();
+    tooltipEl.css({
+      visibility: "visible",
+      left: canvasOffsetLeft + item.x - tooltipWidth / 2,
+      top: canvasOffsetTop
+    });
+  },
+  onHide() {
+    const tooltipEl = $("#tooltip");
+    tooltipEl.css({
+      visibility: "hidden"
+    });
+  }
+});
+
+chart.render()
+
+</script>
+</body>
+</html>
