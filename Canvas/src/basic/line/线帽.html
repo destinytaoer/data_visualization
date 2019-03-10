@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>线帽对比</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<canvas id="canvas" ></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 800 
+  canvas.height = 800
+  let cxt = canvas.getContext('2d')
+
+  cxt.lineWidth = 40
+  cxt.strokeStyle = '#058'
+
+  cxt.beginPath()
+  cxt.moveTo(100,200)
+  cxt.lineTo(700,200)
+  cxt.lineCap = 'butt'
+  cxt.stroke()
+
+  cxt.beginPath()
+  cxt.moveTo(100,400)
+  cxt.lineTo(700,400)
+  cxt.lineCap = 'square'
+  cxt.stroke()
+
+  cxt.beginPath()
+  cxt.moveTo(100,600)
+  cxt.lineTo(700,600)
+  cxt.lineCap = 'round'
+  cxt.stroke()
+
+  // 基线
+  cxt.beginPath()
+  cxt.moveTo(100,100)
+  cxt.lineTo(100,700)
+  cxt.moveTo(700,700)
+  cxt.lineTo(700,100)
+  cxt.lineWidth = 1
+  cxt.stroke()
+</script>
+</body>
+</html>
