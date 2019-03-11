@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>scale</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<p>在 (50, 50) 位置上大小相同的图形分别缩放 1、2、3 倍：</p>
+<canvas id="canvas"></canvas>
+<p>这是缩放的副作用，不仅缩放其本身尺寸，且缩放其相关属性，如位置、线条宽度等</p>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 500 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+
+  cxt.lineWidth= 5;
+
+  cxt.save()
+  cxt.scale(1, 1)
+  cxt.strokeRect(50, 50, 100, 100)
+  cxt.restore()
+  cxt.save()
+  cxt.scale(2, 2)
+  cxt.strokeRect(50, 50, 100, 100)
+  cxt.restore()
+  cxt.save()
+  cxt.scale(3, 3)
+  cxt.strokeRect(50, 50, 100, 100)
+  cxt.restore()
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>普通的矩形函数</title>
+  <title>内置 rect 方法</title>
   <link rel="stylesheet" href="../../styles/canvas.css">
 </head>
 <body>
@@ -16,9 +16,7 @@
   let cxt = canvas.getContext('2d')
   
   function drawRect(x, y, width, height, borderWidth, borderColor, fillColor) {
-    cxt.beginPath()
     cxt.rect(x, y, width, height)
-    cxt.closePath()
 
     cxt.lineWidth= borderWidth
     cxt.strokeStyle = borderColor
@@ -28,6 +26,8 @@
     cxt.stroke()
   }
   drawRect(100, 100, 200, 200, 10, 'red', 'blue')
+  drawRect(200, 200, 200, 200, 10, 'yellow', 'red')
+
 
   // 更简单的方法 fillRect 和 strokeRect
   function drawRect2(x, y, width, height, borderWidth, borderColor, fillColor) {
@@ -41,7 +41,6 @@
   }
   drawRect2(200, 200, 200, 200, 10, 'yellow', 'red')
   // 后面绘制的图形会覆盖前面绘制的图形
-  
 </script>
 </body>
 </html>

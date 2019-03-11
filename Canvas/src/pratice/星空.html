@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>星空</title>
+  <link rel="stylesheet" href="../styles/canvas.css">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 800 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+  let skyStyle = cxt.createRadialGradient(
+    canvas.width/2, canvas.height, 0, 
+    canvas.width/2, canvas.height, (canvas.width+canvas.height) /2
+  );
+  skyStyle.addColorStop(0, '#035')
+  skyStyle.addColorStop(1, 'black')
+  cxt.fillStyle = skyStyle
+  cxt.fillRect(0, 0, canvas.width, canvas.height)
+
+  for (let i = 0; i < 200; i++) {
+    let r = Math.random() * 2 + 2
+    let x = Math.random() * canvas.width
+    let y = Math.random() * canvas.height * 0.75
+    let rot = Math.random() * 360
+    
+    drawStar(cxt, x, y, r, r/2, rot)
+  }
+
+  /**
+   * drawStar: 绘制五角星图案
+   *
+   * @params
+   *   cxt 绘图上下文
+   *   x, y 五角星位置（中心坐标）
+   *   r, R 内外圆半径，控制五角星大小
+   *   rot 顺时针旋转角度
+   *
+   * @return
+   *   [reType]: reDesc
+   *
+   * by destiny on date
+   */
+  function drawStar(cxt, x, y, r, R, rot = 0) {
+    cxt.beginPath()
+    for (let i = 0; i  < 5; i++) {
+      // 外圆 5 个顶点
+      cxt.lineTo(
+        Math.cos((18 + i * 72 - rot) / 180 * Math.PI) * R + x,
+        - Math.sin((18 + i * 72 - rot) / 180 * Math.PI) * R + y
+      )
+      // 内圆 5 个顶点
+      cxt.lineTo(
+        Math.cos((54 + i * 72 - rot) / 180 * Math.PI) * r + x,
+        - Math.sin((54 + i * 72 - rot) / 180 * Math.PI) * r + y
+      )
+    }
+    cxt.closePath()
+
+    cxt.lineWidth = 3
+    cxt.fillStyle = '#fb3'
+    cxt.strokeStyle = '#fd5'
+    cxt.lineJoin = 'round'
+  
+    cxt.fill()
+    cxt.stroke()
+  }
+</script>
+</body>
+</html>

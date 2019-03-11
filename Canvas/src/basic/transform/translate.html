@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>translate</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<p>位移 100 和位移 300 的图形</p>
+<canvas id="canvas"></canvas>
+<p>实际应该是这样的：问题在于位移会基于前面的位移值进行偏移，解决办法是反向位移或者保存状态</p>
+<canvas id="canvas2"></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 500 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+
+  cxt.translate(100, 100)
+  cxt.fillStyle = 'red'
+  cxt.fillRect(0, 0, 100, 100)
+  cxt.translate(300, 300)
+  cxt.fillRect(0, 0, 100, 100)
+
+  let canvas2 = document.getElementById('canvas2')
+  canvas2.width = 500 
+  canvas2.height = 500
+  let cxt2 = canvas2.getContext('2d')
+
+  cxt2.fillStyle = 'red'
+
+  cxt2.save()
+  cxt2.translate(100, 100)
+  cxt2.fillRect(0, 0, 100, 100)
+  cxt2.restore()
+
+  cxt2.translate(300, 300)
+  cxt2.fillRect(0, 0, 100, 100)
+</script>
+</body>
+</html>
