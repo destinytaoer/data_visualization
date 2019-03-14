@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>弯月案例</title>
+  <link rel="stylesheet" href="../styles/canvas.css">
+</head>
+<body>
+<img src="https://img4.mukewang.com/5923cae6000164cd12800720.jpg" width="500" height="300" alt="">
+<canvas id="canvas"></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 500 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+
+  cxt.arc(150, 250, 200, 0.5*Math.PI, 1.5*Math.PI, true)
+  // R = AH * AC / HC
+  // AH = 200, AC = distance(x0, y0, x1, y1), HC = 400 - 150
+  cxt.arcTo(400, 250, 150, 450, 200 * distance(400, 250, 150, 50) / (400 - 150))
+  cxt.stroke()
+
+  fillMoon(cxt, 1.3, 150, 250, 200, 0)
+
+
+  function fillMoon(cxt, d, x, y, R, rot, fillColor) {
+    cxt.save()
+
+    cxt.translate( x, y)
+    cxt.rotate(rot * Math.PI / 180)
+    cxt.scale(R, R)
+    pathMoon(cxt, d)
+
+    cxt.fillStyle = fillColor || '#fb5'
+    cxt.fill()
+
+    cxt.restore()
+  }
+
+  function pathMoon(cxt, d) {
+    cxt.beginPath()
+    cxt.arc(0, 0, 1, 0.5*Math.PI, 1.5*Math.PI, true)
+    cxt.arcTo(d, 0, 0, 1, distance(d, 0, 0, -1) / d)
+    cxt.closePath();
+  }
+
+  // 勾股定理求距离
+  function distance(x1, y1, x2, y2) {
+    return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+  }
+</script>
+</body>
+</html>
