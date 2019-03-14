@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文本水平对齐</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 500 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+
+  cxt.fillStyle = '#058'
+  cxt.font = 'bold 20px sans-serif'
+
+  cxt.textAlign='start'
+  cxt.fillText('text align = start', 250, 20)
+
+  cxt.textAlign='left'
+  cxt.fillText('text align = left', 250, 120)
+  cxt.textAlign='center'
+  cxt.fillText('text align = center', 250, 220)
+  cxt.textAlign='right'
+  cxt.fillText('text align = right', 250, 320)
+  cxt.textAlign='end'
+  cxt.fillText('text align = end', 250, 420)
+
+  cxt.moveTo(250, 0)
+  cxt.lineTo(250, 500)
+  cxt.strokeStyle = '#058'
+  cxt.stroke()
+</script>
+</body>
+</html>

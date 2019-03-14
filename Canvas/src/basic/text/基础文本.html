@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>基础文本</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  let canvas = document.getElementById('canvas')
+  canvas.width = 500 
+  canvas.height = 500
+  let cxt = canvas.getContext('2d')
+
+  cxt.font = 'bold 20px sans-serif'
+  cxt.fillText('学习 Canvas', 100, 20)
+
+  var linear = cxt.createLinearGradient(0, 0, 500, 0);
+  linear.addColorStop(0.0, 'red');
+  linear.addColorStop(0.25, 'green');
+  linear.addColorStop(0.5, 'blue');
+  linear.addColorStop(0.75, 'yellow');
+  linear.addColorStop(1.0, 'purple');
+  cxt.fillStyle = linear
+  cxt.fillText('我是渐变文字！', 100, 100)
+</script>
+</body>
+</html>

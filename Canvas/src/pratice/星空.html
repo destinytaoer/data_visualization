@@ -34,6 +34,8 @@
 
   fillMoon(cxt, 2, 600, 150, 100, 30, '#fb5')
 
+  drawLand(cxt)
+
   /**
    * drawStar: 绘制五角星图案
    *
@@ -97,6 +99,24 @@
   // 勾股定理求距离
   function distance(x1, y1, x2, y2) {
     return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+  }
+
+  function drawLand(cxt) {
+    cxt.save()
+
+    cxt.beginPath()
+    cxt.moveTo(0, 450)
+    cxt.bezierCurveTo(300, 300, 400, 600, 800, 400);
+    cxt.lineTo(800, 500);
+    cxt.lineTo(0, 500)
+    cxt.closePath()
+    var landStyle = cxt.createLinearGradient(0, 500, 0, 0)
+    landStyle.addColorStop(0.0, '#030')
+    landStyle.addColorStop(1.0, '#580')
+    cxt.fillStyle = landStyle
+    cxt.fill()
+
+    cxt.restore()
   }
 </script>
 </body>
