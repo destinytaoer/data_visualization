@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>阴影的绘制</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  let canvas = document.getElementById('canvas');
+  canvas.width = 500;
+  canvas.height = 500;
+  let cxt = canvas.getContext('2d');
+  cxt.shadowColor='#333';
+  cxt.shadowOffsetX = 10;
+  cxt.shadowOffsetY = 10;
+  cxt.shadowBlur = 10;
+  cxt.fillStyle = 'blue';
+  cxt.fillRect(100, 100, 200, 200);
+
+</script>
+</body>
+</html>
