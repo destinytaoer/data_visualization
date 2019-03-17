@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>全局重叠类型</title>
+  <link rel="stylesheet" href="../../styles/canvas.css">
+  <style>
+    #buttons {
+      margin: 0 auto;
+      width: 1200px;
+    }
+
+    #buttons a {
+      display: inline-block;
+      padding: 0 8px;
+      line-height: 20px;
+      text-decoration: none;
+    }
+
+    #buttons a+a {
+      border-left: 1px solid #bbb;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="buttons">
+    <a href="javascript:;">source-over</a>
+    <a href="javascript:;">source-atop</a>
+    <a href="javascript:;">source-in</a>
+    <a href="javascript:;">source-out</a>
+    <a href="javascript:;">destination-over</a>
+    <a href="javascript:;">destination-atop</a>
+    <a href="javascript:;">destination-in</a>
+    <a href="javascript:;">destination-out</a>
+    <a href="javascript:;">lighter</a>
+    <a href="javascript:;">copy</a>
+    <a href="javascript:;">xor</a>
+  </div>
+  <canvas id="canvas" width="1200" height="800"></canvas>
+
+  <script>
+    var canvas = document.getElementById('canvas');
+    var cxt = canvas.getContext('2d');
+
+    draw('source-over')
+
+    let buttons = document.getElementById('buttons').getElementsByTagName('a');
+
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].onclick = function (e) {
+        draw(this.text);
+        return false; // 阻止默认行为
+      }
+    }
+    function draw(compositeStyle) {
+        canvas.width = 1200;
+        canvas.height = 800; // 需要每次都设置一下宽高才能实现
+
+        // 先清空画布
+        cxt.clearRect(0, 0, canvas.width, canvas.height);
+        // 绘制文字
+        cxt.font = 'bold 40px Arial';
+        cxt.textAlign = 'center';
+        cxt.textBaseline = 'middle';
+        cxt.fillStyle = '#058';
+        cxt.fillText(compositeStyle, canvas.width / 2, 60);
+
+        // 绘制矩形
+        cxt.fillStyle = 'blue';
+        cxt.fillRect(300, 150, 500, 500);
+
+        // 绘制三角形
+        cxt.globalCompositeOperation = compositeStyle;
+        cxt.beginPath();
+        cxt.moveTo(700, 250);
+        cxt.lineTo(1000, 750);
+        cxt.lineTo(400, 750);
+        cxt.closePath();
+        cxt.fillStyle = 'red';
+        cxt.fill()
+      }
+  </script>
+</body>
+
+</html>
